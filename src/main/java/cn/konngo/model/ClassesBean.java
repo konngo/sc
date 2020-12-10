@@ -5,11 +5,11 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
-  *  
+  *  班级
   */
 public class ClassesBean implements Serializable {
 
-        //
+        //编号
         private int id;
 
         public int getId() {
@@ -19,7 +19,7 @@ public class ClassesBean implements Serializable {
         public void setId(int id) {
             this.id = id;
         }
-        //
+        //课程名称
         private String name;
 
         public String getName() {
@@ -29,7 +29,7 @@ public class ClassesBean implements Serializable {
         public void setName(String name) {
             this.name = name;
         }
-        //
+        //专业
         private String major;
 
         public String getMajor() {
@@ -39,7 +39,7 @@ public class ClassesBean implements Serializable {
         public void setMajor(String major) {
             this.major = major;
         }
-        //
+        //课时
         private int nums;
 
         public int getNums() {
@@ -49,7 +49,7 @@ public class ClassesBean implements Serializable {
         public void setNums(int nums) {
             this.nums = nums;
         }
-        //
+        //入学年份
         private String years;
 
         public String getYears() {
@@ -59,7 +59,7 @@ public class ClassesBean implements Serializable {
         public void setYears(String years) {
             this.years = years;
         }
-        //
+        //辅导员
         private String fudaoyuan;
 
         public String getFudaoyuan() {

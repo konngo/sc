@@ -1,12 +1,17 @@
 package cn.konngo.util;
 
 import cn.konngo.exception.DBTransforException;
+import cn.konngo.model.UsersBean;
 
 import javax.management.OperationsException;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 // 转换工具
@@ -31,6 +36,48 @@ public class TransforUtil<T>{
             e.printStackTrace();
         }
         return list;
+    }
+
+    /**
+     * 从request中提取对象
+     */
+    public  T requestTransforBean(HttpServletRequest request,Class<T> clazz) throws IllegalAccessException, InstantiationException, SQLException, ParseException {
+        T t=  clazz.newInstance();
+        Field fields[]=t.getClass().getDeclaredFields();
+        for (Field f:fields){
+            f.setAccessible(true);
+            if (request.getParameter(f.getName())!=null&&request.getParameter(f.getName())!=""){
+                System.out.println(f.getName());
+                System.out.println(request.getParameter(f.getName()));
+                System.out.println(getFiledValueByRequest(request,f));
+                f.set(t,getFiledValueByRequest(request,f));
+            }
+        }
+        return t;
+    }
+
+    /**
+     *  从请求中获取属性值
+     */
+    private Object getFiledValueByRequest(HttpServletRequest request,Field f) throws SQLException, ParseException {
+        String clazz=f.getGenericType().toString();
+        if (clazz.equals("class java.lang.String")){
+            return request.getParameter(f.getName());
+        }
+        if (clazz.equals("class java.lang.Integer")||clazz.equals("int")){
+            return Integer.parseInt(request.getParameter(f.getName()));
+        }
+        if (clazz.equals("class java.lang.Double")){
+            return Double.parseDouble(request.getParameter(f.getName()));
+        }
+        if (clazz.equals("class java.lang.Boolean")){
+            return Boolean.parseBoolean(request.getParameter(f.getName()));
+        }
+        if (clazz.equals("class java.lang.Date")){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.parse(request.getParameter(f.getName()));
+        }
+        return null;
     }
 
     /**
@@ -111,4 +158,6 @@ public class TransforUtil<T>{
         sql+=")";
         return sql;
     }
+
+
 }

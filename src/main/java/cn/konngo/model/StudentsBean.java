@@ -5,11 +5,11 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
-  *  
+  *  学生
   */
 public class StudentsBean implements Serializable {
 
-        //
+        //编号
         private int id;
 
         public int getId() {
@@ -19,7 +19,7 @@ public class StudentsBean implements Serializable {
         public void setId(int id) {
             this.id = id;
         }
-        //
+        //学号
         private String sno;
 
         public String getSno() {
@@ -29,7 +29,7 @@ public class StudentsBean implements Serializable {
         public void setSno(String sno) {
             this.sno = sno;
         }
-        //
+        //姓名
         private String name;
 
         public String getName() {
@@ -39,7 +39,7 @@ public class StudentsBean implements Serializable {
         public void setName(String name) {
             this.name = name;
         }
-        //
+        //性别
         private String sex;
 
         public String getSex() {
@@ -49,17 +49,17 @@ public class StudentsBean implements Serializable {
         public void setSex(String sex) {
             this.sex = sex;
         }
-        //
-        private Date birth;
+        //生日
+        private String  birth;
 
-        public Date getBirth() {
+        public String getBirth() {
             return birth;
         }
 
-        public void setBirth(Date birth) {
+        public void setBirth(String birth) {
             this.birth = birth;
         }
-        //
+        //专业
         private String major;
 
         public String getMajor() {
@@ -69,7 +69,7 @@ public class StudentsBean implements Serializable {
         public void setMajor(String major) {
             this.major = major;
         }
-        //
+        //班级
         private String classes;
 
         public String getClasses() {
@@ -79,7 +79,7 @@ public class StudentsBean implements Serializable {
         public void setClasses(String classes) {
             this.classes = classes;
         }
-        //
+        //家庭住址
         private String address;
 
         public String getAddress() {
@@ -89,7 +89,7 @@ public class StudentsBean implements Serializable {
         public void setAddress(String address) {
             this.address = address;
         }
-        //
+        //联系电话
         private String phone;
 
         public String getPhone() {
@@ -99,7 +99,7 @@ public class StudentsBean implements Serializable {
         public void setPhone(String phone) {
             this.phone = phone;
         }
-        //
+        //备注
         private String comment;
 
         public String getComment() {

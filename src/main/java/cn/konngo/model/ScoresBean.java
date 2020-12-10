@@ -5,11 +5,11 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
-  *  
+  *  成绩
   */
 public class ScoresBean implements Serializable {
 
-        //
+        //学生编号
         private int studentid;
 
         public int getStudentid() {
@@ -19,7 +19,7 @@ public class ScoresBean implements Serializable {
         public void setStudentid(int studentid) {
             this.studentid = studentid;
         }
-        //
+        //课程编号
         private int courseid;
 
         public int getCourseid() {
@@ -29,14 +29,14 @@ public class ScoresBean implements Serializable {
         public void setCourseid(int courseid) {
             this.courseid = courseid;
         }
-        //
-        private double score;
+        //成绩
+        private String  score;
 
-        public double getScore() {
+        public String getScore() {
             return score;
         }
 
-        public void setScore(double score) {
+        public void setScore(String score) {
             this.score = score;
         }
 

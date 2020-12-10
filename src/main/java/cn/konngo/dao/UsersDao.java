@@ -1,5 +1,6 @@
 package cn.konngo.dao;
 
+import cn.konngo.model.StudentsBean;
 import cn.konngo.model.UsersBean;
 import cn.konngo.util.DBUtil;
 import cn.konngo.util.TransforUtil;
@@ -64,4 +65,6 @@ public class UsersDao {
         System.out.println(sql);
         return dbUtil.excute(sql);
     }
+
+
 }

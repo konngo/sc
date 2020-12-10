@@ -1,6 +1,7 @@
 package cn.konngo.util;
 
 import cn.konngo.exception.DBTransforException;
+import cn.konngo.model.StudentsBean;
 
 import java.sql.*;
 import java.util.List;
@@ -105,5 +106,6 @@ public class DBUtil<E> {
             }
         }
     }
+
 
 }

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="utf-8">
     <title>管理员</title>
@@ -10,7 +11,6 @@
     <script src="https://www.layuicdn.com/auto/layui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
-
 </head>
 <body>
 <div class="container">
@@ -25,9 +25,30 @@
         </ul>
     </div>
     <br>
+
     <div class="layui-row">
+        <div class="demoTable">
+            <div class="layui-col-xs2">
+                学号：
+                <input class="layui-input" name="studentid" id="studentid" autocomplete="off">
+            </div>
+            <div class="layui-col-xs2">
+                课程号：
+                <input class="layui-input" name="courseid" id="courseid" autocomplete="off">
+            </div>
+            <div class="layui-col-xs2">
+                最小分数：
+                <input class="layui-input" name="minscore" id="minscore" autocomplete="off">
+            </div>
+            <div class="layui-col-xs2">
+                最大分数：
+                <input class="layui-input" name="maxscore" id="maxscore" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload">搜索</button>
+        </div>
+    </div>
 
-
+    <div class="layui-row">
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
@@ -55,17 +76,17 @@
         table.render({
             elem: '#demo'
             ,height: 420
-            ,url: '/users?method=list' //数据接口
-            ,title: '用户表'
+            ,id:'testReload'
+            ,url: '/scores?method=list' //数据接口
+            ,title: '列表'
             ,page: true //开启分页
             ,toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,totalRow: true //开启合计行
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: '编号'}
-                ,{field: 'username', title: '用户名' }
-                ,{field: 'password', title: '密码' }
-                ,{field: 'type', title: '类型' }
+                ,{field: 'studentid', title: '学生编号'}
+                ,{field: 'courseid', title: '课程编号'}
+                ,{field: 'score', title: '成绩'}
                 ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
             ]]
         });
@@ -75,12 +96,12 @@
         table.on('toolbar(test)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
-                case 'getCheckData':{
+                case 'getCheckData': {
                     layer.open({
                         type: 2
                         ,area: ['600px', '400px']
                         ,shade: 0
-                        ,content: 'usersedit.jsp'
+                        ,content: 'scoresedit.jsp'
                         ,btn: ['关闭']
                         ,yes: function(){
                             layer.closeAll();
@@ -98,7 +119,7 @@
                 layer.confirm('真的删除行么', function(index){
                     $.ajax({
                         type: "GET",
-                        url: "/users?method=delete&id="+data.id,
+                        url: "/scores?method=delete&id="+data.id,
                         success:function (data){
                             if (data.code=='0'){
                                 obj.del();
@@ -115,7 +136,7 @@
                     type: 2
                     ,area: ['600px', '400px']
                     ,shade: 0
-                    ,content: '/users?method=edit'
+                    ,content: '/scores?method=edit&id='+data.id
                     ,btn: ['关闭']
                     ,yes: function(){
                         layer.closeAll();
@@ -126,6 +147,34 @@
 
 
 
+        // 重载表格
+        var $ = layui.$, active = {
+            reload: function(){
+
+                var studentid = $('#studentid');
+                var courseid = $('#courseid');
+                var minscore = $('#minscore');
+                var maxscore = $('#maxscore');
+
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        studentid: studentid.val(),
+                        courseid: courseid.val(),
+                        minscore: minscore.val(),
+                        maxscore: maxscore.val()
+                    }
+                }, 'data');
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
     })
 </script>
 </html>
