@@ -1,19 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
 <!doctype html>
 <html lang="zh">
 <head>
     <meta charset="utf-8">
     <title>登录</title>
+    <base href="<%=basePath%>">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script src="https://www.layuicdn.com/auto/layui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+    <%
+    if(request.getAttribute("status")!=null){
+        %>
+    <script>
+        alert("<%=request.getAttribute("status")%>")
+    </script>
+    <%
+    }
+    %>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="app">
 <%--    <img src="images/back.jpg" class="imgStyle">--%>
-    <div class="loginForm">
+    <div class="loginForm" v-if="flag">
         <form action="users">
             <input type="hidden" name="method" value="login">
             <div class="logoHead">
@@ -38,15 +55,109 @@
                 </div>
             </div>
             <div class="usernameWrapDiv">
-                <div class="passwordDiv">
-                    <button type="submit" class="layui-btn">登录</button>
+                <div class="usernameLabel">
+                    <label>验证码:</label>
+                </div>
+                <div class="cardDiv">
+                    <input id="loginCard" class="layui-input cardInput" type="text" name="rand" placeholder="输入验证码">
+                </div>
+                <div class="codeDiv">
+                    <input id="loginCode" class="layui-input codeInput" v-model="rand"  @click="getRand()" type="button">
+                </div>
+            </div>
+            <div class="usernameWrapDiv">
+                <div class="submitLabel">
+                    <label>没有账号？<a href="#" @click="toregister" id="loginRegister">点击注册</a></label>
+                </div>
+                <div class="submitDiv">
+                    <input id="loginBtn" type="submit" class="submit layui-btn layui-btn-primary"  value="登录"></input>
                 </div>
             </div>
 
+
         </form>
+    </div>
+
+    <div class="registerPage" v-if="!flag">
+        <div class="registerDiv">
+            <form action="/users" class="loginForm" >
+
+                <input type="hidden" name="method" value="reg">
+                <div class="usernameWrapDiv">
+                    <div class="usernameLabel">
+                        <label>用户名:</label>
+                    </div>
+                    <div class="usernameDiv">
+                        <i class="layui-icon layui-icon-username adminIcon"></i>
+                        <input id="registerUsername" class="layui-input adminInput" type="text" name="username" placeholder="输入用户名" >
+                    </div>
+                </div>
+                <div class="usernameWrapDiv">
+                    <div class="usernameLabel">
+                        <label>密码:</label>
+                    </div>
+                    <div class="passwordDiv">
+                        <i class="layui-icon layui-icon-password adminIcon"></i>
+                        <input id="registerPassword" class="layui-input adminInput" type="password" name="password" placeholder="输入密码">
+                    </div>
+                </div>
+                <div class="usernameWrapDiv">
+                    <div class="usernameLabel">
+                        <label>确认密码:</label>
+                    </div>
+                    <div class="passwordDiv">
+                        <i class="layui-icon layui-icon-password adminIcon"></i>
+                        <input id="registerWellPassword" class="layui-input adminInput" type="password" name="repassword" placeholder="输入密码">
+                    </div>
+                </div>
+                <div class="usernameWrapDiv">
+                    <div class="submitDiv">
+                        <input  type="submit" class="submit layui-btn layui-btn-primary"  value="注册"></input>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
+<script>
+    var vue=new Vue({
+        el:'#app',
+        data(){
+            return {
+                flag: true,
+                rand: "1234"
+            }
+        },
+        methods:{
+            toregister(){
+                this.flag=!this.flag
+            },
+            changeImg(){
+                document.getElementById('img').src='image.jsp?'+Math.random();
+            },
+            getRand(){
+                var that=this
+                $.ajax({
+                    type: "GET",
+                    url: "/users?method=img",
+                    success:function (data){
+                        console.log(data)
+                        if (data.code=='0'){
+                            that.rand=data.data
+                            console.log(that.rand)
+                        }else {
+                            layer.alert('服务器异常，请联系系统管理员');
+                        }
+                    }
+                });
+            }
+        },
+        mounted(){
+            this.getRand()
+        }
+    })
+</script>
 <style>
     .wrap{
         width: 100%;
@@ -180,7 +291,6 @@
         width: 100%;
         height: 100%;
         /*background-color: #cccccc;*/
-        display: none;
         opacity: 0.75;
     }
     .registerDiv{

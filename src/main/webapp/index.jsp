@@ -1,3 +1,6 @@
+<%@ page import="java.net.InetAddress" %>
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="java.util.Locale" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,13 +13,28 @@
     <script src="https://www.layuicdn.com/auto/layui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
-
+    <style>
+        table td{
+            font-size:10.5pt;
+        }
+        .black12 {
+            font-size: 12px;
+            color: #000000;
+            text-decoration: none;
+        }
+        .black12 a {
+            color: #000000;
+        }
+        .black12 a:hover {
+            color: #0048bf;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <div class="layui-row">
         <ul class="layui-nav layui-bg-green" lay-filter="">
-            <li class="layui-nav-item"><a href="index.jsp">用户信息管理</a></li>
+            <li class="layui-nav-item"><a href="users.jsp">用户信息管理</a></li>
             <li class="layui-nav-item"><a href="studentslist.jsp">学生信息管理</a></li>
             <li class="layui-nav-item"><a href="classeslist.jsp">班级信息管理</a></li>
             <li class="layui-nav-item"><a href="courselist.jsp">课程信息管理</a></li>
@@ -27,105 +45,119 @@
     <br>
     <div class="layui-row">
 
+        <table cellspacing="0" cellpadding="0" width="100%" height="98%" style="padding:0px;margin:0px;">
+            <tbody>
+            <tr>
+                <td width="100%" valign="top">
+                    <table width="100%" height="100%" style="padding:0px;margin:0px;"><!-- 两行 -->
 
+                        <!-- 路径 begin -->
+                        <tr>
+                            <td>
+                                <table width="100%" height="39px" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td id="path" class="black12">当前位置：首页&gt;系统所有属性
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <!-- 路径 end -->
 
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-sm" lay-event="getCheckData">添加</button>
-            </div>
-        </script>
+                        <!-- 正文 begin -->
+                        <tr>
+                            <td style="height:100%;" width="100%">
+                                <table width="100%" height="100%" bgColor="#FFFFFF" style="border:1px #aac9e8 solid" cellpadding="0" cellspacing="0">
+                                    <tr><td height="10"></td></tr>
+                                    <tr>
+                                        <td height="30"><strong>全部系统属性</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#aaaaaa" height="1"></td>
+                                    </tr>
+                                    <tr><td height="20"></td></tr>
+                                    <tr>
+                                        <td>所有的系统属性，即 <b><i>System.getProperties()</i></b> 的输出。</td>
+                                    </tr>
+                                    <tr><td height="10"></td></tr>
+                                    <tr>
+                                        <td class="block-indent" style="padding-left:10px">
+                                            <table width="98%" border="0" cellspacing="1" cellpadding="2" bgcolor="#999999">
+                                                <tr bgcolor="#CCCCCC">
+                                                    <th width="5%">&nbsp;</th>
+                                                    <th width="20%" nowrap>属性名</th>
+                                                    <th width="75%" nowrap>属性值</th>
+                                                </tr>
+                                                <%
+                                                    InetAddress addr = InetAddress.getLocalHost();
+                                                    String ip=addr.getHostAddress().toString();//获得本机IP
+                                                    String address=addr.getHostName().toString();//获得本机名称
+                                                %>
+                                                <tr bgcolor="#FFFFFF">
+                                                    <td align="center"></td>
+                                                    <td>IP</td>
+                                                    <td style="word-break:break-all;"><%=ip %></td>
+                                                </tr>
+                                                <tr bgcolor="#FFFFFF">
+                                                    <td align="center"></td>
+                                                    <td>address</td>
+                                                    <td style="word-break:break-all;"><%=address %></td>
+                                                </tr>
+                                                <%
+                                                    int iCount = 1;
+                                                    Enumeration enu = System.getProperties().keys();
+                                                    while(enu.hasMoreElements())
+                                                    {
+                                                        String sKey = (String) enu.nextElement();
+                                                        String sVal = System.getProperty(sKey);
+                                                %>
+                                                <tr bgcolor="#FFFFFF">
+                                                    <td align="center"><%= iCount++ %>&nbsp;</td>
+                                                    <td><%= sKey %></td>
+                                                    <td style="word-break:break-all;"><%= sVal %></td>
+                                                </tr>
 
-        <table class="layui-hide" id="demo" lay-filter="test"></table>
+                                                <%
+                                                    }
+                                                %>
+                                                <tr bgcolor="#FFFFFF">
+                                                    <td align="right"><%= iCount++ %>&nbsp;</td>
+                                                    <td>Default Locale</td>
+                                                    <td><%= Locale.getDefault() %></td>
+                                                </tr>
+                                                <%
+                                                    Runtime runtimeInfo = Runtime.getRuntime();
+                                                    long unitMb = 1204 * 1024L;
+                                                %>
+                                                <tr bgcolor="#FFFFFF">
+                                                    <td align="right"><%= iCount++ %>&nbsp;</td>
+                                                    <td>TotalMemory</td>
+                                                    <td><%=runtimeInfo.totalMemory()/unitMb%>(M)</td>
+                                                </tr>
+                                                <tr bgcolor="#FFFFFF">
+                                                    <td align="right"><%= iCount++ %>&nbsp;</td>
+                                                    <td>FreeMemory</td>
+                                                    <td><%=runtimeInfo.freeMemory()/unitMb%>(M)</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <!-- 正文 end -->
+                    </table>
+                </td>
 
-        <script type="text/html" id="barDemo">
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
+                <!-- 侧边 begin -->
+
+                <td width="7px" height="100%" valign="right" rowspan=2 background="../images/dts_rbg.gif">&nbsp;</td>
+            </tr>
+            <!-- 侧边 end -->
+            </tbody>
+        </table>
+
     </div>
 </div>
 </body>
-<script>
-
-    layui.use(['table'],function (){
-        var table = layui.table //表格
-            ,laypage = layui.laypage //分页
-
-
-        //执行一个 table 实例
-        table.render({
-            elem: '#demo'
-            ,height: 420
-            ,url: '/users?method=list' //数据接口
-            ,title: '用户表'
-            ,page: true //开启分页
-            ,toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-            ,totalRow: true //开启合计行
-            ,cols: [[ //表头
-                {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: '编号'}
-                ,{field: 'username', title: '用户名' }
-                ,{field: 'password', title: '密码' }
-                ,{field: 'type', title: '类型' }
-                ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
-            ]]
-        });
-
-
-        //头工具栏事件
-        table.on('toolbar(test)', function(obj){
-            var checkStatus = table.checkStatus(obj.config.id);
-            switch(obj.event){
-                case 'getCheckData':{
-                    layer.open({
-                        type: 2
-                        ,area: ['600px', '400px']
-                        ,shade: 0
-                        ,content: 'usersedit.jsp'
-                        ,btn: ['关闭']
-                        ,yes: function(){
-                            layer.closeAll();
-                        }
-                    });
-                }
-            };
-        });
-
-        //监听行工具事件
-        table.on('tool(test)', function(obj){
-            var data = obj.data;
-            //console.log(obj)
-            if(obj.event === 'del'){
-                layer.confirm('真的删除行么', function(index){
-                    $.ajax({
-                        type: "GET",
-                        url: "/users?method=delete&id="+data.id,
-                        success:function (data){
-                            if (data.code=='0'){
-                                obj.del();
-                                layer.close(index);
-                                layer.alert('删除成功');
-                            }else {
-                                layer.alert('服务器异常，请联系系统管理员');
-                            }
-                        }
-                    });
-                });
-            } else if(obj.event === 'edit'){
-                layer.open({
-                    type: 2
-                    ,area: ['600px', '400px']
-                    ,shade: 0
-                    ,content: '/users?method=edit'
-                    ,btn: ['关闭']
-                    ,yes: function(){
-                        layer.closeAll();
-                    }
-                });
-            }
-        });
-
-
-
-    })
-</script>
 </html>

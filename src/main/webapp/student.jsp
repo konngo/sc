@@ -20,6 +20,7 @@
             <li class="layui-nav-item"><a href="studentplan.jsp">课程表信息</a></li>
             <li class="layui-nav-item"><a href="studentscore.jsp">成绩信息</a></li>
             <li class="layui-nav-item"><a href="resetpassword.jsp">修改密码</a></li>
+            <li class="layui-nav-item"><a href="deleteuser.jsp">注销账号</a></li>
         </ul>
     </div>
     <br>

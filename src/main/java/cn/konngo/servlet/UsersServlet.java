@@ -50,7 +50,39 @@ public class UsersServlet  extends HttpServlet {
             request.getRequestDispatcher("usersedit.jsp").forward(request,response);
         }else if(method.equals("resetpassword")){
             resetPassword(request,response);
+        }else if(method.equals("reg")){
+            register(request,response);
+        }else if(method.equals("img")){
+            createimg(request,response);
         }
+    }
+
+    private void register(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            UsersBean bean=trans.requestTransforBean(request,UsersBean.class);
+            boolean flag=service.insert(bean);
+            if(flag){
+                request.setAttribute("status","注册成功!");
+            }else {
+                request.setAttribute("status","服务器异常!");
+            }
+            request.getRequestDispatcher("login.jsp").forward(request,response);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void resetPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -136,10 +168,32 @@ public class UsersServlet  extends HttpServlet {
         out.print(resJSON); // 输出
     }
 
+    // 创建图片
+    private void createimg(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("utf-8");  // 设置request字符编码
+        String searchText = request.getParameter("search"); // 获取传入的search字段的内容
+        response.setContentType("text/json; charset=utf-8");    // 设置response的编码及格式
+        PrintWriter out = response.getWriter();
+        String rand=Math.round((Math.random()+1) * 1000)+"";
+        request.getSession().setAttribute("rand",rand);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("data",rand );
+        resultMap.put("code", "0");
+        String resJSON = JSON.toJSONString(resultMap);     // 转换为json
+        out.print(resJSON); // 输出
+    }
+
     //登录
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username=req.getParameter("username");
         String password=req.getParameter("password");
+        String rand=req.getParameter("rand");
+        String msg= (String) req.getSession().getAttribute("rand");
+        if (!rand.equals(msg)){
+            req.setAttribute("status","验证码错误");
+            req.getRequestDispatcher("login.jsp").forward(req,resp);
+        }
+
         UsersBean user=service.login(username,password);
         if (user!=null){
             if (user.getType().equals("管理员")){

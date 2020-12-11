@@ -16,7 +16,7 @@
 <div class="container">
     <div class="layui-row">
         <ul class="layui-nav layui-bg-green" lay-filter="">
-            <li class="layui-nav-item"><a href="index.jsp">用户信息管理</a></li>
+            <li class="layui-nav-item"><a href="users.jsp">用户信息管理</a></li>
             <li class="layui-nav-item"><a href="studentslist.jsp">学生信息管理</a></li>
             <li class="layui-nav-item"><a href="classeslist.jsp">班级信息管理</a></li>
             <li class="layui-nav-item"><a href="courselist.jsp">课程信息管理</a></li>
